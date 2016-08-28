@@ -7,6 +7,7 @@ import places from 'places.js'
 import cx from 'classnames'
 
 import autopilot from '../../models/autopilot.js'
+import setting from '../../models/settings.js'
 
 const travelModes = [
   [ 'walk', 9, 'street-view' ],
@@ -40,8 +41,8 @@ class Autopilot extends Component {
 
   componentDidMount() {
     // initialize algolia places input
-    const { placesEl } = this.refs
-    this.placesAutocomplete = places({ container: placesEl })
+    const { placesEl, placesEl2 } = this.refs
+    this.placesAutocomplete = places({ container: placesEl2 })
     this.placesAutocomplete.on('change', this.handleSuggestionChange)
 
     window.addEventListener('keyup', ({ keyCode }) => {
@@ -55,6 +56,12 @@ class Autopilot extends Component {
         } else if (autopilot.paused) {
           autopilot.start()
         }
+      }
+
+      if (keyCode == 13) {
+        const lat = parseFloat(placesEl.value.split(', ')[0])
+        const lng = parseFloat(placesEl.value.split(', ')[1])
+        this.handleSuggestionChange({ suggestion: { latlng: { lat, lng } } })
       }
     })
   }
@@ -120,6 +127,16 @@ class Autopilot extends Component {
   }
 
   render() {
+    let inlineStyle1
+    let inlineStyle2
+    if (setting.coordinateSearch.get()) {
+      inlineStyle1 = { opacity: 0.7, position: 'fixed', zIndex: 1 }
+      inlineStyle2 = { opacity: 0, position: 'fixed', zIndex: 0 }
+    } else {
+      inlineStyle1 = { opacity: 0, position: 'fixed', zIndex: 0 }
+      inlineStyle2 = { opacity: 0.7, position: 'fixed', zIndex: 1 }
+    }
+
     return (
       <div className='autopilot'>
         { this.renderTogglePause() }
@@ -133,7 +150,8 @@ class Autopilot extends Component {
         }
 
         <div className={ cx('algolia-places', { hide: !autopilot.clean }) }>
-          <input ref='placesEl' type='search' placeholder='Destination' />
+          <input ref='placesEl' type='search' placeholder='Coordinate' className='customInput' style={inlineStyle1} />
+          <input ref='placesEl2' type='search' placeholder='Destination' style={inlineStyle2} />
         </div>
 
         { !autopilot.clean &&
