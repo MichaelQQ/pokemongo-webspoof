@@ -13,7 +13,7 @@ const App = () =>
 
     { /* app wide alerts */ }
     <Alert
-      timeout='none'
+      timeout={ 5000 }
       position='bottom-right'
       stack={ { limit: 3 } }
       html={ true } />
