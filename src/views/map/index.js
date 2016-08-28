@@ -8,6 +8,7 @@ import Alert from 'react-s-alert'
 
 import userLocation from '../../models/user-location.js'
 import settings from '../../models/settings.js'
+import radar from '../../models/radar.js'
 
 import SpeedCounter from './speed-counter.js'
 import BooleanSettings from './boolean-settings.js'
@@ -17,6 +18,7 @@ import Controls from './controls.js'
 import TotalDistance from './total-distance.js'
 import Autopilot from './autopilot.js'
 import Pokeball from './pokeball.js'
+import Poke from './poke.js'
 
 @observer
 class Map extends Component {
@@ -77,6 +79,7 @@ class Map extends Component {
 
   render() {
     const [ latitude, longitude ] = userLocation
+    const { pokeList } = radar
 
     return (
       <div className='google-map-container'>
@@ -91,6 +94,9 @@ class Map extends Component {
             onGoogleApiLoaded={ this.handleGoogleMapLoaded }
             yesIWantToUseGoogleMapApiInternals={ true }>
             <Pokeball lat={ userLocation[0] } lng={ userLocation[1] } />
+            { pokeList.map((pokemon, idx) =>
+              <Poke key={idx} lat={ pokemon.latitude } lng={ pokemon.longitude } number={pokemon.pokemon_id} />
+            ) }
           </GoogleMap> :
           <div
             style={ {
@@ -123,8 +129,12 @@ class Map extends Component {
         <Coordinates />
         <SpeedCounter />
         <SpeedLimit />
-        <BooleanSettings />
-        <Controls />
+        { settings.showSettings.get() &&
+          <BooleanSettings />
+        }
+        { settings.showArrow.get() &&
+          <Controls />
+        }
         <TotalDistance />
         <Autopilot ref={ (ref) => { this.autopilot = ref } } />
       </div>

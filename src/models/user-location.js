@@ -5,6 +5,7 @@ import Alert from 'react-s-alert'
 
 import settings from './settings.js'
 import stats from './stats.js'
+import { pokeRadar } from './radar.js'
 
 // electron specific import
 const { writeFile } = window.require('fs')
@@ -43,7 +44,7 @@ const updateXcodeLocation = throttle(([ lat, lng ]) => {
   const jitter = settings.addJitterToMoves.get() ? random(-0.000009, 0.000009, true) : 0
 
   const xcodeLocationData =
-    `<gpx creator="Xcode" version="1.1"><wpt lat="${(lat + jitter).toFixed(6)}" lon="${(lng + jitter).toFixed(6)}"><name>PokemonLocation</name></wpt></gpx>`
+    `<gpx creator="Xcode" version="1.1"><wpt lat="${(lat + jitter).toFixed(6)}" lon="${(lng + jitter).toFixed(6)}"><name></name></wpt></gpx>`
 
   // write `pokemonLocation.gpx` file fro xcode spoof location
   const filePath = resolve(remote.getGlobal('tmpProjectPath'), 'pokemonLocation.gpx')
@@ -82,8 +83,14 @@ userLocation.observe(() => updateXcodeLocation(userLocation))
 
 // updated at random intervals to prevent reversion
 let currentTimer = null
-function scheduleUpdate() {
+// function scheduleUpdate() {
+const scheduleUpdate = async () => {
   const randomWait = random(1000, 10000, true)
+
+  if (settings.showRadar.get()) {
+    await pokeRadar(userLocation[0], userLocation[1], 0.009)
+  }
+
   if (!settings.stationaryUpdates.get()) {
     if (currentTimer) {
       window.clearTimeout(currentTimer)
