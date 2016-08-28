@@ -287,7 +287,7 @@
 				INFOPLIST_FILE = "pokemon-webspoof/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.iam4x.pokemon-webspoof";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.gogopoke.pokemon-webspoof";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;

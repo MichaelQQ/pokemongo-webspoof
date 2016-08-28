@@ -53,4 +53,10 @@
   .edit {
     margin-left: 10px;
   }
+
+  .customInput {
+    width: 330px;
+    height: 40px;
+    padding: 15px;
+  }
 }
