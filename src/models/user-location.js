@@ -5,7 +5,6 @@ import Alert from 'react-s-alert'
 
 import settings from './settings.js'
 import stats from './stats.js'
-import { pokeRadar } from './radar.js'
 
 // electron specific import
 const { writeFile } = window.require('fs')
@@ -83,13 +82,8 @@ userLocation.observe(() => updateXcodeLocation(userLocation))
 
 // updated at random intervals to prevent reversion
 let currentTimer = null
-// function scheduleUpdate() {
-const scheduleUpdate = async () => {
+function scheduleUpdate() {
   const randomWait = random(1000, 10000, true)
-
-  if (settings.showRadar.get()) {
-    await pokeRadar(userLocation[0], userLocation[1], 0.009)
-  }
 
   if (!settings.stationaryUpdates.get()) {
     if (currentTimer) {

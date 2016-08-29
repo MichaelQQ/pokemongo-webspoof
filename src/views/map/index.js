@@ -95,7 +95,11 @@ class Map extends Component {
             yesIWantToUseGoogleMapApiInternals={ true }>
             <Pokeball lat={ userLocation[0] } lng={ userLocation[1] } />
             { pokeList.map((pokemon, idx) =>
-              <Poke key={idx} lat={ pokemon.latitude } lng={ pokemon.longitude } number={pokemon.pokemon_id} />
+              <Poke
+                key={ idx }
+                lat={ pokemon.latitude }
+                lng={ pokemon.longitude }
+                number={ pokemon.pokemon_id } />
             ) }
           </GoogleMap> :
           <div
